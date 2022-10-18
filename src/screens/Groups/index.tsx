@@ -6,7 +6,7 @@ import { Container } from "./styles";
 export const Groups = (): ReactElement => {
   return (
     <Container>
-      <Header />
+      <Header showBackButton />
     </Container>
   );
 };

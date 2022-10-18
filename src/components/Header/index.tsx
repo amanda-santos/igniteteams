@@ -1,11 +1,22 @@
 import { ReactElement } from "react";
-import { Container, Logo } from "./styles";
+import { BackButton, BackIcon, Container, Logo } from "./styles";
 
 import logoImg from "@assets/logo.png";
 
-export const Header = (): ReactElement => {
+type HeaderProps = {
+  showBackButton?: boolean;
+};
+
+export const Header = ({
+  showBackButton = false,
+}: HeaderProps): ReactElement => {
   return (
     <Container>
+      {showBackButton && (
+        <BackButton>
+          <BackIcon />
+        </BackButton>
+      )}
       <Logo source={logoImg} />
     </Container>
   );
