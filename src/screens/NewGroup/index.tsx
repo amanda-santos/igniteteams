@@ -1,10 +1,9 @@
+import { ReactElement } from "react";
+
+import { Button, Header, Highlight, Input } from "@components/index";
 import { Container, Content, Icon } from "./styles";
 
-import { Header } from "@components/Header";
-import { Button } from "@components/Button";
-import { Highlight } from "@components/Highlight";
-
-export const NewGroup = () => {
+export const NewGroup = (): ReactElement => {
   return (
     <Container>
       <Header showBackButton />
@@ -17,7 +16,9 @@ export const NewGroup = () => {
           subtitle="crie a turma para adicionar as pessoas"
         />
 
-        <Button title="Criar" />
+        <Input placeholder="Nome da turma" />
+
+        <Button title="Criar" style={{ marginTop: 20 }} />
       </Content>
     </Container>
   );
