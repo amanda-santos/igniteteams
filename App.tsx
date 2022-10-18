@@ -6,7 +6,7 @@ import {
   Roboto_700Bold,
 } from "@expo-google-fonts/roboto";
 
-import { Groups } from "@screens/Groups";
+import { Groups, NewGroup } from "@screens/index";
 import { LoadIndicator } from "@components/Loading/styles";
 import { theme } from "@theme/index";
 
@@ -15,12 +15,14 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
-      {fontsLoaded ? <Groups /> : <LoadIndicator />}
+      <>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+        {fontsLoaded ? <NewGroup /> : <LoadIndicator />}
+      </>
     </ThemeProvider>
   );
 }
