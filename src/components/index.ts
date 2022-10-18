@@ -1,3 +1,4 @@
+export { Button } from "./Button";
 export { GroupCard } from "./GroupCard";
 export { Header } from "./Header";
 export { Highlight } from "./Highlight";
