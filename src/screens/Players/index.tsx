@@ -34,6 +34,7 @@ export const Players = (): ReactElement => {
 
       <HeaderList>
         <FlatList
+          horizontal
           data={["Time A", "Time B"]}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
@@ -43,7 +44,6 @@ export const Players = (): ReactElement => {
               onPress={() => setTeam(item)}
             />
           )}
-          horizontal
         />
 
         <NumberOfPlayers>{players.length}</NumberOfPlayers>
