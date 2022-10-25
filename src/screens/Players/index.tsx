@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 
 import {
   ButtonIcon,
@@ -7,9 +7,13 @@ import {
   Highlight,
   Input,
 } from "@components/index";
-import { Container, Form } from "./styles";
+import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
+import { FlatList } from "react-native";
 
 export const Players = (): ReactElement => {
+  const [team, setTeam] = useState("Team A");
+  const [players, setPlayers] = useState([]);
+
   return (
     <Container>
       <Header showBackButton />
@@ -25,7 +29,22 @@ export const Players = (): ReactElement => {
         <ButtonIcon icon="add" />
       </Form>
 
-      <Filter title="Team A" isActive />
+      <HeaderList>
+        <FlatList
+          data={["Time A", "Time B"]}
+          keyExtractor={(item) => item}
+          renderItem={({ item }) => (
+            <Filter
+              title={item}
+              isActive={item === team}
+              onPress={() => setTeam(item)}
+            />
+          )}
+          horizontal
+        />
+
+        <NumberOfPlayers>{players.length}</NumberOfPlayers>
+      </HeaderList>
     </Container>
   );
 };
