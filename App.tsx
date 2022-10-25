@@ -21,7 +21,7 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        {fontsLoaded ? <NewGroup /> : <LoadIndicator />}
+        {fontsLoaded ? <Groups /> : <LoadIndicator />}
       </>
     </ThemeProvider>
   );
