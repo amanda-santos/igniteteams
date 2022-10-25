@@ -1,8 +1,7 @@
 import { ReactElement } from "react";
-import { Header } from "@components/Header";
-import { Highlight } from "@components/Highlight";
 
-import { Container } from "./styles";
+import { ButtonIcon, Header, Highlight, Input } from "@components/index";
+import { Container, Form } from "./styles";
 
 export const Players = (): ReactElement => {
   return (
@@ -13,6 +12,12 @@ export const Players = (): ReactElement => {
         title="Group's name"
         subtitle="add your friends and split the teams"
       />
+
+      <Form>
+        <Input placeholder="Nome da pessoa" autoCorrect={false} />
+
+        <ButtonIcon icon="add" />
+      </Form>
     </Container>
   );
 };
