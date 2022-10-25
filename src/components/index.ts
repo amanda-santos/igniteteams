@@ -1,5 +1,6 @@
 export { Button } from "./Button";
 export { ButtonIcon } from "./ButtonIcon";
+export { Filter } from "./Filter";
 export { GroupCard } from "./GroupCard";
 export { Header } from "./Header";
 export { Highlight } from "./Highlight";

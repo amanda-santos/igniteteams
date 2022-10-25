@@ -1,6 +1,12 @@
 import { ReactElement } from "react";
 
-import { ButtonIcon, Header, Highlight, Input } from "@components/index";
+import {
+  ButtonIcon,
+  Filter,
+  Header,
+  Highlight,
+  Input,
+} from "@components/index";
 import { Container, Form } from "./styles";
 
 export const Players = (): ReactElement => {
@@ -18,6 +24,8 @@ export const Players = (): ReactElement => {
 
         <ButtonIcon icon="add" />
       </Form>
+
+      <Filter title="Team A" isActive />
     </Container>
   );
 };
