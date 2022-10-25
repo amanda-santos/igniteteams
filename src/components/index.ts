@@ -7,3 +7,4 @@ export { Highlight } from "./Highlight";
 export { Input } from "./Input";
 export { ListEmpty } from "./ListEmpty";
 export { Loading } from "./Loading";
+export { PlayerCard } from "./PlayerCard";

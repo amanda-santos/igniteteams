@@ -1,4 +1,5 @@
 import { ReactElement, useState } from "react";
+import { FlatList } from "react-native";
 
 import {
   ButtonIcon,
@@ -6,13 +7,13 @@ import {
   Header,
   Highlight,
   Input,
+  PlayerCard,
 } from "@components/index";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
-import { FlatList } from "react-native";
 
 export const Players = (): ReactElement => {
   const [team, setTeam] = useState("Team A");
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState(["Amanda", "John"]);
 
   return (
     <Container>
@@ -45,6 +46,14 @@ export const Players = (): ReactElement => {
 
         <NumberOfPlayers>{players.length}</NumberOfPlayers>
       </HeaderList>
+
+      <FlatList
+        data={players}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <PlayerCard name={item} onRemove={() => {}} />
+        )}
+      />
     </Container>
   );
 };
