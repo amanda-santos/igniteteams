@@ -2,18 +2,20 @@ import { ReactElement, useState } from "react";
 import { FlatList } from "react-native";
 
 import {
+  Button,
   ButtonIcon,
   Filter,
   Header,
   Highlight,
   Input,
+  ListEmpty,
   PlayerCard,
 } from "@components/index";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 
 export const Players = (): ReactElement => {
   const [team, setTeam] = useState("Team A");
-  const [players, setPlayers] = useState(["Amanda", "John"]);
+  const [players, setPlayers] = useState([]);
 
   return (
     <Container>
@@ -53,7 +55,17 @@ export const Players = (): ReactElement => {
         renderItem={({ item }) => (
           <PlayerCard name={item} onRemove={() => {}} />
         )}
+        ListEmptyComponent={() => (
+          <ListEmpty message="There's no players in this group" />
+        )}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          { paddingBottom: 100 },
+          players.length === 0 && { flex: 1 },
+        ]}
       />
+
+      <Button title="Remover Turma" type="SECONDARY" />
     </Container>
   );
 };
