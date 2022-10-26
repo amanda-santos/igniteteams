@@ -6,7 +6,7 @@ import {
   Roboto_700Bold,
 } from "@expo-google-fonts/roboto";
 
-import { Groups, NewGroup, Players } from "@screens/index";
+import { Routes } from "@routes/index";
 import { LoadIndicator } from "@components/Loading/styles";
 import { theme } from "@theme/index";
 
@@ -21,7 +21,7 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        {fontsLoaded ? <Players /> : <LoadIndicator />}
+        {fontsLoaded ? <Routes /> : <LoadIndicator />}
       </>
     </ThemeProvider>
   );
