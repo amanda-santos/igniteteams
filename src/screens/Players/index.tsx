@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { Alert, FlatList } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
@@ -16,6 +16,8 @@ import { addPlayerByGroup } from "@storage/player/addPlayerByGroup";
 import { getPlayersByGroup } from "@storage/player/getPlayersByGroup";
 import { AppError } from "@utils/AppError";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
+import { getPlayersByGroupAndTeam } from "@storage/player/getPlayersByGroupAndTeam";
+import { PlayerStorageDTO } from "@storage/player/PlayerStorageDTO";
 
 type RouteParams = {
   group: string;
@@ -23,12 +25,25 @@ type RouteParams = {
 
 export const Players = (): ReactElement => {
   const [team, setTeam] = useState("Team A");
-  const [players, setPlayers] = useState([]);
   const [newPlayerName, setNewPlayerName] = useState("");
+  const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
 
   const route = useRoute();
 
   const { group } = route.params as RouteParams;
+
+  const fetchPlayersByTeam = async () => {
+    try {
+      const playersByTeam = await getPlayersByGroupAndTeam(group, team);
+      setPlayers(playersByTeam);
+    } catch (error) {
+      console.log(error);
+      Alert.alert(
+        "Players",
+        "It was not possible to load the players. Try again later."
+      );
+    }
+  };
 
   const handleAddPlayer = async () => {
     const trimmedPlayerName = newPlayerName.trim();
@@ -44,6 +59,7 @@ export const Players = (): ReactElement => {
 
     try {
       await addPlayerByGroup(newPlayer, group);
+      await fetchPlayersByTeam();
       const players = await getPlayersByGroup(group);
 
       console.log(players);
@@ -59,6 +75,10 @@ export const Players = (): ReactElement => {
       }
     }
   };
+
+  useEffect(() => {
+    fetchPlayersByTeam();
+  }, [team]);
 
   return (
     <Container>
@@ -98,9 +118,9 @@ export const Players = (): ReactElement => {
 
       <FlatList
         data={players}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
-          <PlayerCard name={item} onRemove={() => {}} />
+          <PlayerCard name={item.name} onRemove={() => {}} />
         )}
         ListEmptyComponent={() => (
           <ListEmpty message="There's no players in this group" />
