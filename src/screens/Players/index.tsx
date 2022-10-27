@@ -1,5 +1,5 @@
-import { ReactElement, useEffect, useState } from "react";
-import { Alert, FlatList } from "react-native";
+import { ReactElement, useEffect, useRef, useState } from "react";
+import { Alert, FlatList, TextInput } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 import {
@@ -27,6 +27,8 @@ export const Players = (): ReactElement => {
   const [team, setTeam] = useState("Team A");
   const [newPlayerName, setNewPlayerName] = useState("");
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
+
+  const newPlayerNameInputRef = useRef<TextInput>(null);
 
   const route = useRoute();
 
@@ -59,10 +61,12 @@ export const Players = (): ReactElement => {
 
     try {
       await addPlayerByGroup(newPlayer, group);
-      await fetchPlayersByTeam();
-      const players = await getPlayersByGroup(group);
 
-      console.log(players);
+      newPlayerNameInputRef.current?.blur();
+
+      setNewPlayerName("");
+
+      await fetchPlayersByTeam();
     } catch (error) {
       if (error instanceof AppError) {
         Alert.alert("New Player", error.message);
@@ -91,9 +95,13 @@ export const Players = (): ReactElement => {
 
       <Form>
         <Input
+          inputRef={newPlayerNameInputRef}
           placeholder="Player's name"
           autoCorrect={false}
+          value={newPlayerName}
           onChangeText={setNewPlayerName}
+          onSubmitEditing={handleAddPlayer}
+          returnKeyType="done"
         />
 
         <ButtonIcon icon="add" onPress={handleAddPlayer} />
