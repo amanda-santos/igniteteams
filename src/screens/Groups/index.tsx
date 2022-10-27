@@ -1,6 +1,6 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useCallback, useState } from "react";
 import { FlatList } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 import {
   Button,
@@ -9,20 +9,36 @@ import {
   Highlight,
   ListEmpty,
 } from "@components/index";
+import { getAllGroups } from "@storage/group/getAllGroups";
 import { Container } from "./styles";
 
 export const Groups = (): ReactElement => {
-  const [groups, setGroups] = useState([]);
+  const [groups, setGroups] = useState<string[]>([]);
   const navigation = useNavigation();
 
   const handleCreateNewGroup = () => {
     navigation.navigate("new");
   };
 
+  const fetchGroups = async () => {
+    try {
+      const groups = await getAllGroups();
+      setGroups(groups);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchGroups();
+    }, [])
+  );
+
   return (
     <Container>
       <Header showBackButton />
-      <Highlight title="Turmas" subtitle="jogue com a sua turma" />
+      <Highlight title="Groups" subtitle="play with your group of friends!" />
 
       <FlatList
         data={groups}
@@ -30,12 +46,12 @@ export const Groups = (): ReactElement => {
         renderItem={({ item }) => <GroupCard title={item} />}
         contentContainerStyle={groups.length === 0 && { flex: 1 }}
         ListEmptyComponent={() => (
-          <ListEmpty message="Que tal cadastrar a primeira turma?" />
+          <ListEmpty message="How about registering your first group of friends?" />
         )}
         showsVerticalScrollIndicator={false}
       />
 
-      <Button title="Criar nova turma" onPress={handleCreateNewGroup} />
+      <Button title="Create new group" onPress={handleCreateNewGroup} />
     </Container>
   );
 };

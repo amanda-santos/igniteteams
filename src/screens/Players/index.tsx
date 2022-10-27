@@ -36,7 +36,7 @@ export const Players = (): ReactElement => {
       />
 
       <Form>
-        <Input placeholder="Nome da pessoa" autoCorrect={false} />
+        <Input placeholder="Player's name" autoCorrect={false} />
 
         <ButtonIcon icon="add" />
       </Form>
@@ -74,7 +74,7 @@ export const Players = (): ReactElement => {
         ]}
       />
 
-      <Button title="Remover Turma" type="SECONDARY" />
+      <Button title="Remove group" type="SECONDARY" />
     </Container>
   );
 };
