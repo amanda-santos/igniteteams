@@ -30,6 +30,7 @@ export const NewGroup = (): ReactElement => {
           title="Criar"
           style={{ marginTop: 20 }}
           onPress={handleCreateNewGroup}
+          disabled={!group}
         />
       </Content>
     </Container>
