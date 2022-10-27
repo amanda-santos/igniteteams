@@ -16,10 +16,6 @@ export const Groups = (): ReactElement => {
   const [groups, setGroups] = useState<string[]>([]);
   const navigation = useNavigation();
 
-  const handleCreateNewGroup = () => {
-    navigation.navigate("new");
-  };
-
   const fetchGroups = async () => {
     try {
       const groups = await getAllGroups();
@@ -27,6 +23,14 @@ export const Groups = (): ReactElement => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const handleCreateNewGroup = () => {
+    navigation.navigate("new");
+  };
+
+  const handleOpenGroup = (group: string) => {
+    navigation.navigate("players", { group });
   };
 
   useFocusEffect(
@@ -43,7 +47,9 @@ export const Groups = (): ReactElement => {
       <FlatList
         data={groups}
         keyExtractor={(item) => item}
-        renderItem={({ item }) => <GroupCard title={item} />}
+        renderItem={({ item }) => (
+          <GroupCard title={item} onPress={() => handleOpenGroup(item)} />
+        )}
         contentContainerStyle={groups.length === 0 && { flex: 1 }}
         ListEmptyComponent={() => (
           <ListEmpty message="How about registering your first group of friends?" />
