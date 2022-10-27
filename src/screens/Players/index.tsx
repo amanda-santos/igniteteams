@@ -1,5 +1,5 @@
 import { ReactElement, useState } from "react";
-import { FlatList } from "react-native";
+import { Alert, FlatList } from "react-native";
 import { useRoute } from "@react-navigation/native";
 
 import {
@@ -12,6 +12,9 @@ import {
   ListEmpty,
   PlayerCard,
 } from "@components/index";
+import { addPlayerByGroup } from "@storage/player/addPlayerByGroup";
+import { getPlayersByGroup } from "@storage/player/getPlayersByGroup";
+import { AppError } from "@utils/AppError";
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 
 type RouteParams = {
@@ -21,10 +24,41 @@ type RouteParams = {
 export const Players = (): ReactElement => {
   const [team, setTeam] = useState("Team A");
   const [players, setPlayers] = useState([]);
+  const [newPlayerName, setNewPlayerName] = useState("");
 
   const route = useRoute();
 
   const { group } = route.params as RouteParams;
+
+  const handleAddPlayer = async () => {
+    const trimmedPlayerName = newPlayerName.trim();
+
+    if (trimmedPlayerName.length === 0) {
+      return Alert.alert("New Player", "Please, inform the player name");
+    }
+
+    const newPlayer = {
+      name: trimmedPlayerName,
+      team,
+    };
+
+    try {
+      await addPlayerByGroup(newPlayer, group);
+      const players = await getPlayersByGroup(group);
+
+      console.log(players);
+    } catch (error) {
+      if (error instanceof AppError) {
+        Alert.alert("New Player", error.message);
+      } else {
+        console.log(error);
+        Alert.alert(
+          "New Player",
+          "An error occurred while creating the player. Please try again."
+        );
+      }
+    }
+  };
 
   return (
     <Container>
@@ -36,15 +70,19 @@ export const Players = (): ReactElement => {
       />
 
       <Form>
-        <Input placeholder="Player's name" autoCorrect={false} />
+        <Input
+          placeholder="Player's name"
+          autoCorrect={false}
+          onChangeText={setNewPlayerName}
+        />
 
-        <ButtonIcon icon="add" />
+        <ButtonIcon icon="add" onPress={handleAddPlayer} />
       </Form>
 
       <HeaderList>
         <FlatList
           horizontal
-          data={["Time A", "Time B"]}
+          data={["Team A", "Team B"]}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
             <Filter
