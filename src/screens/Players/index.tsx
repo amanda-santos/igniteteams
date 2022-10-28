@@ -14,11 +14,14 @@ import {
   PlayerCard,
 } from "@components/index";
 import { AppError } from "@utils/AppError";
-import { addPlayerByGroup } from "@storage/player/addPlayerByGroup";
-import { getPlayersByGroupAndTeam } from "@storage/player/getPlayersByGroupAndTeam";
-import { PlayerStorageDTO } from "@storage/player/PlayerStorageDTO";
-import { removePlayerByGroup } from "@storage/player/removePlayerByGroup";
-import { removeGroupByName } from "@storage/group/removeGroupByName";
+import {
+  PlayerStorageDTO,
+  addPlayerByGroup,
+  getPlayersByGroupAndTeam,
+  removePlayerByGroup,
+} from "@storage/player";
+import { removeGroupByName } from "@storage/group";
+
 import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 
 type RouteParams = {
@@ -72,7 +75,7 @@ export const Players = (): ReactElement => {
     const trimmedPlayerName = newPlayerName.trim();
 
     if (trimmedPlayerName.length === 0) {
-      return Alert.alert("New player", "Please, inform the player name");
+      return Alert.alert("New player", "Please, inform the player name.");
     }
 
     const newPlayer = {
@@ -178,7 +181,7 @@ export const Players = (): ReactElement => {
             />
           )}
           ListEmptyComponent={() => (
-            <ListEmpty message="There are no players in this group yet" />
+            <ListEmpty message="There are no players in this team yet" />
           )}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[

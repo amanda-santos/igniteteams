@@ -10,7 +10,8 @@ import {
   ListEmpty,
   Loading,
 } from "@components/index";
-import { getAllGroups } from "@storage/group/getAllGroups";
+import { getAllGroups } from "@storage/group";
+
 import { Container } from "./styles";
 
 export const Groups = (): ReactElement => {
@@ -26,7 +27,7 @@ export const Groups = (): ReactElement => {
     } catch (error) {
       Alert.alert(
         "Groups",
-        "It was not possible to load the groups. Try again later."
+        "It was not possible to load the groups. Please try again."
       );
       console.log(error);
     } finally {

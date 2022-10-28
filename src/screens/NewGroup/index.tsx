@@ -3,8 +3,9 @@ import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { Button, Header, Highlight, Input } from "@components/index";
-import { createGroup } from "@storage/group/createGroup";
+import { createGroup } from "@storage/group";
 import { AppError } from "@utils/AppError";
+
 import { Container, Content, Icon } from "./styles";
 
 export const NewGroup = (): ReactElement => {
@@ -16,17 +17,17 @@ export const NewGroup = (): ReactElement => {
 
     try {
       if (trimmedGroup.length === 0) {
-        return Alert.alert("New Group", "Please enter a group name.");
+        return Alert.alert("New group", "Please enter a group name.");
       }
 
       await createGroup(trimmedGroup);
       navigation.navigate("players", { group: trimmedGroup });
     } catch (error) {
       if (error instanceof AppError) {
-        Alert.alert("New Group", error.message);
+        Alert.alert("New group", error.message);
       } else {
         Alert.alert(
-          "New Group",
+          "New group",
           "An error occurred while creating the group. Please try again."
         );
         console.log(error);
