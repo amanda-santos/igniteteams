@@ -1,4 +1,5 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
+import { BackHandler } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import logoImg from "@assets/logo.png";
@@ -15,7 +16,16 @@ export const Header = ({
 
   const handleGoBack = () => {
     navigation.navigate("groups");
+    return true;
   };
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleGoBack);
+
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", handleGoBack);
+    };
+  }, []);
 
   return (
     <Container>
