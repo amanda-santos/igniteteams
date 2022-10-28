@@ -12,12 +12,12 @@ import {
   ListEmpty,
   PlayerCard,
 } from "@components/index";
-import { addPlayerByGroup } from "@storage/player/addPlayerByGroup";
-import { getPlayersByGroup } from "@storage/player/getPlayersByGroup";
 import { AppError } from "@utils/AppError";
-import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
+import { addPlayerByGroup } from "@storage/player/addPlayerByGroup";
 import { getPlayersByGroupAndTeam } from "@storage/player/getPlayersByGroupAndTeam";
 import { PlayerStorageDTO } from "@storage/player/PlayerStorageDTO";
+import { removePlayerByGroup } from "@storage/player/removePlayerByGroup";
+import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 
 type RouteParams = {
   group: string;
@@ -63,10 +63,8 @@ export const Players = (): ReactElement => {
       await addPlayerByGroup(newPlayer, group);
 
       newPlayerNameInputRef.current?.blur();
-
       setNewPlayerName("");
-
-      await fetchPlayersByTeam();
+      fetchPlayersByTeam();
     } catch (error) {
       if (error instanceof AppError) {
         Alert.alert("New Player", error.message);
@@ -77,6 +75,21 @@ export const Players = (): ReactElement => {
           "An error occurred while creating the player. Please try again."
         );
       }
+    }
+  };
+
+  const handleRemovePlayer = async (playerName: string) => {
+    try {
+      await removePlayerByGroup(playerName, group);
+
+      fetchPlayersByTeam();
+    } catch (error) {
+      console.log(error);
+
+      Alert.alert(
+        "Remove player",
+        "An error occurred while removing the player. Please try again."
+      );
     }
   };
 
@@ -128,7 +141,10 @@ export const Players = (): ReactElement => {
         data={players}
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
-          <PlayerCard name={item.name} onRemove={() => {}} />
+          <PlayerCard
+            name={item.name}
+            onRemove={() => handleRemovePlayer(item.name)}
+          />
         )}
         ListEmptyComponent={() => (
           <ListEmpty message="There's no players in this group" />
