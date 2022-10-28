@@ -10,6 +10,7 @@ import {
   Highlight,
   Input,
   ListEmpty,
+  Loading,
   PlayerCard,
 } from "@components/index";
 import { AppError } from "@utils/AppError";
@@ -17,14 +18,15 @@ import { addPlayerByGroup } from "@storage/player/addPlayerByGroup";
 import { getPlayersByGroupAndTeam } from "@storage/player/getPlayersByGroupAndTeam";
 import { PlayerStorageDTO } from "@storage/player/PlayerStorageDTO";
 import { removePlayerByGroup } from "@storage/player/removePlayerByGroup";
-import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 import { removeGroupByName } from "@storage/group/removeGroupByName";
+import { Container, Form, HeaderList, NumberOfPlayers } from "./styles";
 
 type RouteParams = {
   group: string;
 };
 
 export const Players = (): ReactElement => {
+  const [isLoading, setIsLoading] = useState(true);
   const [team, setTeam] = useState("Team A");
   const [newPlayerName, setNewPlayerName] = useState("");
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
@@ -39,14 +41,17 @@ export const Players = (): ReactElement => {
 
   const fetchPlayersByTeam = async () => {
     try {
+      setIsLoading(true);
       const playersByTeam = await getPlayersByGroupAndTeam(group, team);
       setPlayers(playersByTeam);
     } catch (error) {
       console.log(error);
       Alert.alert(
         "Players",
-        "It was not possible to load the players. Try again later."
+        "It was not possible to load the players. Please try again."
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -67,7 +72,7 @@ export const Players = (): ReactElement => {
     const trimmedPlayerName = newPlayerName.trim();
 
     if (trimmedPlayerName.length === 0) {
-      return Alert.alert("New Player", "Please, inform the player name");
+      return Alert.alert("New player", "Please, inform the player name");
     }
 
     const newPlayer = {
@@ -83,7 +88,7 @@ export const Players = (): ReactElement => {
       fetchPlayersByTeam();
     } catch (error) {
       if (error instanceof AppError) {
-        Alert.alert("New Player", error.message);
+        Alert.alert("New player", error.message);
       } else {
         console.log(error);
         Alert.alert(
@@ -111,8 +116,8 @@ export const Players = (): ReactElement => {
 
   const handleRemoveGroup = () => {
     Alert.alert("Remove", "Are you sure you want to remove this group?", [
-      { text: "Não", style: "cancel" },
-      { text: "Sim", onPress: () => onRemoveGroup() },
+      { text: "No", style: "cancel" },
+      { text: "Yes", onPress: () => onRemoveGroup() },
     ]);
   };
 
@@ -160,24 +165,28 @@ export const Players = (): ReactElement => {
         <NumberOfPlayers>{players.length}</NumberOfPlayers>
       </HeaderList>
 
-      <FlatList
-        data={players}
-        keyExtractor={(item) => item.name}
-        renderItem={({ item }) => (
-          <PlayerCard
-            name={item.name}
-            onRemove={() => handleRemovePlayer(item.name)}
-          />
-        )}
-        ListEmptyComponent={() => (
-          <ListEmpty message="There's no players in this group" />
-        )}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[
-          { paddingBottom: 100 },
-          players.length === 0 && { flex: 1 },
-        ]}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={players}
+          keyExtractor={(item) => item.name}
+          renderItem={({ item }) => (
+            <PlayerCard
+              name={item.name}
+              onRemove={() => handleRemovePlayer(item.name)}
+            />
+          )}
+          ListEmptyComponent={() => (
+            <ListEmpty message="There are no players in this group yet" />
+          )}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[
+            { paddingBottom: 100 },
+            players.length === 0 && { flex: 1 },
+          ]}
+        />
+      )}
 
       <Button
         title="Remove group"
